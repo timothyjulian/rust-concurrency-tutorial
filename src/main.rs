@@ -2,6 +2,8 @@ mod channels;
 
 mod atomicity;
 
+mod thread_local;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -107,5 +109,19 @@ mod tests {
 
         let total = handler.join().unwrap_or_default();
         println!("{}", total);
+    }
+
+    #[test]
+    fn test_thread_panic() {
+        let handle = thread::spawn(|| {
+            panic!("oops! I got panicked"); // this thread is not main thread then won't crash the app
+        }); 
+
+        match handle.join() {
+            Ok(_) => println!("thread finished!"),
+            Err(_) => println!("thread panic"),
+        }
+
+        println!("application finish");
     }
 }
