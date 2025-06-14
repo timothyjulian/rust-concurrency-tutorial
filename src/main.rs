@@ -17,6 +17,27 @@ mod tests {
         });
 
         println!("Application finish");
-        thread::sleep(Duration::from_secs(3));
+        thread::sleep(Duration::from_secs(7));
+    }
+
+    #[test]
+    fn test_join_handle() {
+        let handle = thread::spawn(|| {
+            let mut counter = 0;
+            for i in 1..=5 {
+                println!("counter: {}", i);
+                thread::sleep(Duration::from_secs(1));
+                counter += 1;
+            }
+            return counter;
+        });
+
+        let result = handle.join();
+        match result {
+            Ok(counter) => println!("total counter: {}", counter),
+            Err(err) => println!("error: {:?}", err),
+        }
+
+        println!("application DONE");
     }
 }
