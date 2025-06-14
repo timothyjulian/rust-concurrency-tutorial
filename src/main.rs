@@ -4,6 +4,8 @@ mod atomicity;
 
 mod thread_local;
 
+mod barrier;
+
 fn main() {
     println!("Hello, world!");
 }
