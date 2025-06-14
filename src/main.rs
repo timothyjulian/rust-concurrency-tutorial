@@ -8,6 +8,8 @@ mod barrier;
 
 mod once;
 
+mod asyncs;
+
 fn main() {
     println!("Hello, world!");
 }
