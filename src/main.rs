@@ -1,5 +1,7 @@
 mod channels;
 
+mod atomicity;
+
 fn main() {
     println!("Hello, world!");
 }
