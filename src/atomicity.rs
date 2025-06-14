@@ -2,7 +2,7 @@
 mod tests {
     use std::{
         sync::{
-            Arc,
+            Arc, Mutex,
             atomic::{AtomicI32, Ordering},
         },
         thread,
@@ -59,8 +59,12 @@ mod tests {
         for _ in 1..10 {
             let counter_clone = Arc::clone(&counter);
             let handler = thread::spawn(move || {
-                for _ in 0..1000000 {
+                for _ in 0..10 {
                     counter_clone.fetch_add(1, Ordering::Relaxed);
+                    let value = counter_clone.load(Ordering::Relaxed);
+
+                    let name = thread::current();
+                    println!("{} from {:?}", value, name.id());
                 }
             });
             handlers.push(handler);
@@ -71,5 +75,31 @@ mod tests {
         }
 
         println!("{}", counter.load(Ordering::Relaxed));
+    }
+
+    #[test]
+    fn test_mutex() {
+        // Mutex is expensive
+        let counter = Arc::new(Mutex::new(0)); // Mutex is mutual exclusion, will lock the data but allow mutability
+
+        let mut handlers = vec![];
+        for _ in 1..10 {
+            let counter_clone = Arc::clone(&counter);
+            let handler = thread::spawn(move || {
+                for _ in 0..10 {
+                    let mut data = counter_clone.lock().unwrap();
+                    *data += 1;
+                    let name = thread::current();
+                    println!("{} from {:?}", *data, name.id());
+                }
+            });
+            handlers.push(handler);
+        }
+
+        for handler in handlers {
+            handler.join().unwrap();
+        }
+
+        println!("{}", *counter.lock().unwrap());
     }
 }
