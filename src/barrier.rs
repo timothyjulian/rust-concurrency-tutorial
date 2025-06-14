@@ -1,7 +1,10 @@
-
 #[cfg(test)]
-mod tests{
-    use std::{sync::{Arc, Barrier}, thread, time::Duration};
+mod tests {
+    use std::{
+        sync::{Arc, Barrier},
+        thread,
+        time::Duration,
+    };
 
     #[test]
     fn test_barrier() {

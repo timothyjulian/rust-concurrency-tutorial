@@ -6,6 +6,8 @@ mod thread_local;
 
 mod barrier;
 
+mod once;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -117,7 +119,7 @@ mod tests {
     fn test_thread_panic() {
         let handle = thread::spawn(|| {
             panic!("oops! I got panicked"); // this thread is not main thread then won't crash the app
-        }); 
+        });
 
         match handle.join() {
             Ok(_) => println!("thread finished!"),

@@ -1,6 +1,5 @@
-
 #[cfg(test)]
-mod tests{
+mod tests {
     use std::{cell::RefCell, thread};
 
     thread_local! {
